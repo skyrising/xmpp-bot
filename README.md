@@ -6,7 +6,7 @@
 ### Usage
 
 ```javascript
-const XMPPBot = require('node-xmpp-bot');
+const XMPPBot = require('xmpp-bot');
 
 let bot = new XMPPBot({
   jid: 'juliet@capulet.tld',
