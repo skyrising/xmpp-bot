@@ -1,5 +1,7 @@
 # xmpp-bot
 ## A bot that handles commands for you
+[![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?maxAge=2592000&style=flat-square)](http://standardjs.com/)
+[![license](https://img.shields.io/github/license/skyrising/xmpp-bot.svg?maxAge=2592000&style=flat-square)](https://raw.githubusercontent.com/skyrising/xmpp-bot/master/LICENSE)
 
 ### Usage
 
