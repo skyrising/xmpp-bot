@@ -1,0 +1,32 @@
+{
+  "name": "xmpp-bot",
+  "version": "1.0.0",
+  "description": "A bot that handles commands for you",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/skyrising/xmpp-bot.git"
+  },
+  "keywords": [
+    "xmpp",
+    "bot",
+    "command",
+    "message",
+    "im"
+  ],
+  "author": "skyrising",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/skyrising/xmpp-bot/issues"
+  },
+  "homepage": "https://github.com/skyrising/xmpp-bot#readme",
+  "dependencies": {
+    "debug": "^2.6.0",
+    "lodash": "^4.17.4",
+    "node-xmpp-client": "^3.1.2",
+    "node-xmpp-core": "^5.0.7"
+  }
+}
