@@ -78,19 +78,16 @@ class XMPPBot {
   }
 
   onStanza (stanza) {
-    debug('received: ' + stanza.toString())
     if (!stanza.is('message') ||
       (stanza.attrs.type !== 'chat' && stanza.attrs.type !== 'groupchat') ||
       stanza.getChild('delay')) return
-    debug(stanza)
+    debug('received ' + stanza.toString())
     let text = stanza.getChildText('body')
     if (!text) return
-    debug(text)
     let room = null
     if (stanza.attrs.type === 'groupchat') {
       room = stanza.attrs.from.substr(0, stanza.attrs.from.indexOf('/'))
       let nick = this.roomnick[room]
-      debug(`Nick for ${room}: ${nick}`)
       if (!nick) return
       if (text.indexOf(`@${nick} `) >= 0) {
         text = text.replace(`@${nick} `, '')
@@ -99,11 +96,10 @@ class XMPPBot {
       } else {
         return
       }
-      debug(text)
     }
     text = _.filter(text.split(/\s+/))
     if (text.length === 0) return
-    debug(text)
+    debug('Command: ' + text)
     this.execCommand(
       text[0],
       room || stanza.attrs.from,
