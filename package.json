@@ -1,6 +1,6 @@
 {
   "name": "xmpp-bot",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "A bot that handles commands for you",
   "main": "index.js",
   "scripts": {
