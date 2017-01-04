@@ -2,6 +2,7 @@ const XMPP = require('node-xmpp-core')
 XMPP.Client = require('node-xmpp-client')
 const debug = require('debug')('xmpp-bot')
 const util = require('util')
+const uuid = require('uuid')
 const _ = require('lodash')
 
 class XMPPBot {
@@ -78,6 +79,13 @@ class XMPPBot {
   }
 
   onStanza (stanza) {
+    if (stanza.is('presence') && stanza.attrs.type === 'subscribe') {
+      this.client.send(new XMPP.Stanza('presence', {
+        id: uuid(),
+        type: 'subscribed',
+        to: stanza.attrs.from
+      }))
+    }
     if (!stanza.is('message') ||
       (stanza.attrs.type !== 'chat' && stanza.attrs.type !== 'groupchat') ||
       stanza.getChild('delay')) return
