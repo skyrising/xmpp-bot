@@ -9,6 +9,41 @@ const NS_MUC = 'http://jabber.org/protocol/muc'
 const NS_DISCO = 'http://jabber.org/protocol/disco#info'
 const NS_DATA_FORM = 'jabber:x:data'
 
+function parseArguments (text) {
+  if (!text) return []
+  let args = []
+  let arg = ''
+  let inQuotes = ''
+  let esc = false
+  for (let c of text) {
+    if (esc) {
+      arg += c
+      esc = false
+      continue
+    }
+    if (c === '\\') {
+      esc = true
+      continue
+    }
+    if (inQuotes && c === inQuotes) {
+      inQuotes = ''
+      continue
+    }
+    if (!inQuotes && (c === '\'' || c === '"')) {
+      inQuotes = c
+      continue
+    }
+    if (!inQuotes && c === ' ') {
+      if (arg) args.push(arg)
+      arg = ''
+      continue
+    }
+    arg += c
+  }
+  if (arg) args.push(arg)
+  return args
+}
+
 class XMPPBot {
   constructor (options) {
     options = Object.assign({
@@ -90,7 +125,7 @@ class XMPPBot {
       }))
     }
     if (stanza.is('iq') && stanza.attrs.type === 'get') {
-      if(stanza.getChild('query', NS_DISCO)) {
+      if (stanza.getChild('query', NS_DISCO)) {
         this.sendIqResult(stanza, new XMPP.Element('query', {xmlns: NS_DISCO})
           .c('identity', {category: 'client', type: 'bot'}).up()
           .c('x', {xmlns: NS_DATA_FORM, type: 'result'})
@@ -118,13 +153,13 @@ class XMPPBot {
         return
       }
     }
-    text = _.filter(text.split(/\s+/))
-    if (text.length === 0) return
-    debug('Command: ' + text)
+    const argv = parseArguments(text)
+    if (argv.length === 0) return
+    debug('Command: ' + argv)
     this.execCommand(
-      text[0],
+      argv[0],
       room || stanza.attrs.from,
-      text.slice(1),
+      argv.slice(1),
       stanza.attrs.type
     )
   }
