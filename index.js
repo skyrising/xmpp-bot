@@ -140,14 +140,15 @@ class XMPPBot {
     debug('received ' + stanza.toString())
     let text = stanza.getChildText('body')
     if (!text) return
+    text = text.trim()
     let room = null
     if (stanza.attrs.type === 'groupchat') {
       room = stanza.attrs.from.substr(0, stanza.attrs.from.indexOf('/'))
       let nick = this.roomnick[room]
       if (!nick) return
-      if (text.indexOf(`@${nick} `) >= 0) {
+      if (text.indexOf(`@${nick} `) === 0) {
         text = text.replace(`@${nick} `, '')
-      } else if (text.indexOf(nick + ' ') >= 0) {
+      } else if (text.indexOf(nick + ' ') === 0) {
         text = text.replace(nick + ' ', '')
       } else {
         return
