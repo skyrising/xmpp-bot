@@ -50,6 +50,7 @@ class XMPPBot {
       reconnect: true
     }, options)
     let {rooms} = options
+    this.rooms = rooms || []
     this.roomnick = {}
     this.commands = {}
     this.commandState = {}
@@ -90,29 +91,32 @@ class XMPPBot {
   execCommand (commandName, to, args, messageType) {
     let command = this.commands[commandName]
     if (!command) return
-    const answer = (answer) => {
-      let message = new XMPP.Stanza('message', {
-        type: messageType,
-        to: to
-      })
-      if (answer instanceof XMPP.Element) {
-        answer = answer.tree()
-        if (answer.name === 'message') {
-          message.children = answer.children
+    const sendMessage = (msg, to, type) => {
+      let message = new XMPP.Stanza('message', {type, to})
+      if (msg instanceof XMPP.Element) {
+        msg = msg.root()
+        if (msg.name === 'message') {
+          message.children = msg.children
         } else {
           message.cnode(answer)
         }
       } else {
-        if (typeof answer !== 'string') {
-          answer = util.inspect(answer)
+        if (typeof msg !== 'string') {
+          msg = util.inspect(msg)
         }
-        message.c('body').t(answer)
+        message.c('body').t(msg)
       }
       this.client.send(message)
     }
-    let result = command(answer, args, this.commandState[commandName], this.commandState)
-    if (result) {
-      answer(result)
+    const answer = (msg) => sendMessage(msg, to, messageType)
+    answer.broadcast = (msg) => _.forEach(rooms, room => sendMessage(msg, room.jid, 'groupchat'))
+    try {
+      let result = command.command(answer, args, this.commandState[commandName], this.commandState)
+      if (result) {
+        answer(result)
+      }
+    } catch (e) {
+      answer(`Error executing ${commandName}: ${e}`)
     }
   }
 

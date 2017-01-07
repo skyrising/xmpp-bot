@@ -41,6 +41,7 @@ bot.disconnect();
 Command functions are passed 4 arguments:
 
 - answer: function that sends the provided text or XML element
+- answer.broadcast: broadcast message to all rooms
 - args: array of arguments
 - state: an object that is saved for this command (`=env[command-name]`)
 - env: state shared by all commands
