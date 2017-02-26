@@ -111,7 +111,7 @@ class XMPPBot {
     const answer = (msg) => sendMessage(msg, to, messageType)
     answer.broadcast = (msg) => _.forEach(rooms, room => sendMessage(msg, room.jid, 'groupchat'))
     try {
-      let result = command.command(answer, args, this.commandState[commandName], this.commandState)
+      let result = command(answer, args, this.commandState[commandName], this.commandState)
       if (result) {
         answer(result)
       }
