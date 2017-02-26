@@ -109,12 +109,10 @@ class XMPPBot {
       this.client.send(message)
     }
     const answer = (msg) => sendMessage(msg, to, messageType)
-    answer.broadcast = (msg) => _.forEach(rooms, room => sendMessage(msg, room.jid, 'groupchat'))
+    answer.broadcast = (msg) => _.forEach(this.rooms, room => sendMessage(msg, room.jid, 'groupchat'))
     try {
       let result = command(answer, args, this.commandState[commandName], this.commandState)
-      if (result) {
-        answer(result)
-      }
+      if (result) answer(result)
     } catch (e) {
       answer(`Error executing ${commandName}: ${e}`)
     }
