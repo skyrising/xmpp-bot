@@ -27,7 +27,7 @@ bot.command('name', (answer, args, state, env) => {
 // or just return answer
 bot.command('echo', (answer, args) => args.join(' '))
 
-// disconnect when your done (automatically done on process exit)
+// disconnect when you're done (automatically done on process exit)
 bot.disconnect();
 ```
 
